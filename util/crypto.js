@@ -1,20 +1,23 @@
 const crypto = require('crypto');
 
+// Generate a random client ID
+  exports.generateClientId = function() {
+  return crypto.randomBytes(8).toString('hex');
+};
+
 // Generate a client secret
-const generateClientSecret = () => {
+exports.generateClientSecret = function() {
   const secretLength = 32; // Length of the secret in bytes
   return crypto.randomBytes(secretLength).toString('hex');
 };
 
 // Generate a client key
-const generateClientKey = () => {
+exports.generateClientKey = function() {
   const keyLength = 16; // Length of the key in bytes
   return crypto.randomBytes(keyLength).toString('hex');
 };
 
-// Example usage
-const clientSecret = generateClientSecret();
-const clientKey = generateClientKey();
 
-console.log('Client Secret:', clientSecret);
-console.log('Client Key:', clientKey);
+
+
+

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const config = require('./config')
+const crypto = require('./util/crypto');
 const verifyToken = require('./middleware/authToken');
 
 const WhitelistedIP = require('./db');
@@ -32,9 +33,19 @@ app.post('/api/whitelist', async (req, res) => {
   if (!ip) {
     return res.status(400).json({ error: 'IP address is required' });
   }
+
   try {
-    const token = jwt.sign({ ip: ip }, config.clientSecret);
-    const savedIP = new WhitelistedIP({ ip, token });
+    const clientId = crypto.generateClientId();
+    const clientSecret = crypto.generateClientSecret();
+    const clientKey = crypto.generateClientKey();
+
+    const payload = {
+      ip: ip,
+      clientId: clientId,
+      iat: Math.floor(Date.now() / 1000),
+    };
+    const token = jwt.sign(payload, clientSecret, {}, { algorithm: 'RS256' });
+    const savedIP = new WhitelistedIP({ ip: ip, token: token, clientId: clientId, clientSecret: clientSecret, clientKey: clientKey });
     await savedIP.save();
     if (!savedIP) {
       console.error('Error adding IP to whitelist:', err);
@@ -78,9 +89,9 @@ app.get('/api/protected', async (req, res, next) => {
   if (!token) {
     return res.status(401).send({ error: "Token is required" })
   }
-  const savedToken = await WhitelistedIP.findOne({ token: token,ip:ip })
+  const savedToken = await WhitelistedIP.findOne({ token: token, ip: ip })
   // const decoded = jwt.verify(token, config.clientSecret)
-  if (token == savedToken.token && ip ==savedToken.ip) {
+  if (token == savedToken.token && ip == savedToken.ip) {
     next();
   }
   else {
