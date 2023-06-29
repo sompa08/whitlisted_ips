@@ -3,7 +3,6 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const config = require('./config')
 const crypto = require('./util/crypto');
-const verifyToken = require('./middleware/authToken');
 
 const WhitelistedIP = require('./db');
 const rateLimit = require('express-rate-limit');
