@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node save.vouchers.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "Sompa Pal",
@@ -19,9 +19,11 @@
     "express-rate-limit": "^6.7.0",
     "fs": "^0.0.1-security",
     "ipware": "^2.0.0",
+    "jest": "^29.5.0",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.6.0",
     "mongoose": "^7.3.1",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "supertest": "^6.3.3"
   }
 }

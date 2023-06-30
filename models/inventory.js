@@ -7,7 +7,7 @@ mongoose.connect('mongodb://localhost:27017/whitelist', {
 });
 const Schema = mongoose.Schema;
 // schma for vouchers
-const voucherSchema = new mongoose.Schema({
+const inventorySchema = new mongoose.Schema({
     cardNumber: {
         type: String
     },
@@ -20,10 +20,28 @@ const voucherSchema = new mongoose.Schema({
     expiryDate: {
         type: Date
     },
+    productId:{
+        type: String
+    },
+    denomination:{
+        type: String
+    },
+    vendorSkuId:{
+        type: String 
+    },
     vendorId: {
         type: String
     },
     orderId: {
+        type: String
+    },
+    vendorOrderId:{
+        type: String
+    },
+    status:{
+      type: String // available, delivered, cancelled
+    },
+    cancellationReason:{
         type: String
     },
     createdAt: {
@@ -44,6 +62,6 @@ const voucherSchema = new mongoose.Schema({
     }
 });
 
-const Vouchers = mongoose.model('vouchers', voucherSchema);
+const Inventories = mongoose.model('Inventories', inventorySchema);
 
-module.exports = Vouchers;
+module.exports = Inventories;
