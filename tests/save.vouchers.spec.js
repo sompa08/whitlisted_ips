@@ -38,7 +38,6 @@ describe('POST /upload', () => {
       .post('/upload')
       .attach('file', filePath);
     // .expect(202);
-    console.log(response.body);
     expect(response.body).toEqual({ status: 202, message: 'File uploaded successfully' });
     expect(Vouchers.insertMany).toHaveBeenCalledWith(fileData);
 
