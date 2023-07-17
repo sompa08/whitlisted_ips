@@ -1,23 +1,23 @@
 const axios = require('axios');
 
 const createsignature = require('../utils/create.signature');
-const Inventories = require('../models/inventory');
+const Products = require('../models/product');
 const token =require('../middlewares/token');
 
 
-const URL = 'https://sandbox.woohoo.in/rest/v3/catalog/products/EGCGBFK001';
+const URL = 'https://sandbox.woohoo.in/rest/v3/catalog/categories/121/products?limit=10&offset=0';
 const method = 'get';
 const dateISO = new Date().toISOString();
 
-async function saveProductList(req, res, next) {
+async function saveCategoryProductList(req, res, next) {
   let tokenCode = await token();
 
   const signature = createsignature(method, URL);
-const bearer= 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb25zdW1lcklkIjo0ODgsImV4cCI6MTY5MDIzMTgxNywidG9rZW4iOiI5MzJiZDkxZGFlZDg0NWQyNDhkMTQ0ZWY1NzE3NTQ0ZiJ9.8eTKzc21vLAwixaXIdFYIyibSyRtmhC8INdAAcNgQA8'
+
   const config = {
     method: method,
     maxBodyLength: Infinity,
-    url :'https://sandbox.woohoo.in/rest/v3/catalog/products/EGCGBFK001',
+    url: `'https://sandbox.woohoo.in/rest/v3/catalog/categories/${req.body.categoryId}/products?limit=10&offset=0`,
     headers: {
       'signature': signature,
       'dateAtClient': dateISO,
@@ -27,15 +27,18 @@ const bearer= 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb25zdW1lcklkIjo0ODgsImV4
   };
   try {
     const response = await axios.request(config);
-    const productList = Inventories.insertMany(response.data);
+      // console.log(JSON.stringify(response.data));
+      const productList = await Products.insertMany(response.data);
       if (!productList) {
         return next({ status: 400, name: 'customerror', message: 'Please fill the data in the file!' });
       } else {
         console.info('Data inserted successfully');
       }
       return res.status(202).send({ status: 202, message: 'Data inserted successfully' });
-  } catch (error) {
-    console.log(error);
-  }
+
+    } catch (error) {
+      console.log(error);
+    }
+
 }
-module.exports = saveProductList;
+module.exports = saveCategoryProductList;
