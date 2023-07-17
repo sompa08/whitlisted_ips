@@ -2,12 +2,16 @@ const axios = require('axios');
 
 const createsignature = require('../utils/create.signature');
 const Products = require('../models/product');
+const token =require('../middlewares/token');
+
 
 const URL = 'https://sandbox.woohoo.in/rest/v3/catalog/categories/121/products?limit=10&offset=0';
 const method = 'get';
 const dateISO = new Date().toISOString();
 
-function saveProductList(req, res, next) {
+async function saveProductList(req, res, next) {
+  let tokenCode = await token();
+
   const signature = createsignature(method, URL);
 
   const config = {
@@ -17,11 +21,11 @@ function saveProductList(req, res, next) {
     headers: {
       'signature': signature,
       'dateAtClient': dateISO,
-      'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb25zdW1lcklkIjo0ODgsImV4cCI6MTY5MDAxNDYyMSwidG9rZW4iOiIzN2Q2MGQ4Njk2NmZlNGVkN2Q3ODUwNTgyMjFhZTg5YyJ9.nhfeTjU6fh-6FrN9l-TBtdISmfBG9E8almvv73SRxvA',
+      'Authorization': `Bearer ${tokenCode}`,
       'Cookie': 'PHPSESSID=eqrp3l8qcchb6jui227150q6do; frontend=4jh225e6m5q667fmq7d90l2c2d; frontend_cid=W1TlOlMwtiOVBIcG'
     }
   };
-
+console.log('config:::::::::',config);
   axios.request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
