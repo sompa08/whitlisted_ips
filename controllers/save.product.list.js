@@ -17,7 +17,7 @@ async function saveProductList(req, res, next) {
   const config = {
     method: method,
     maxBodyLength: Infinity,
-    url: URL,
+    url: `'https://sandbox.woohoo.in/rest/v3/catalog/categories/${req.body.categoryId}/products?limit=10&offset=0`,
     headers: {
       'signature': signature,
       'dateAtClient': dateISO,
@@ -25,10 +25,9 @@ async function saveProductList(req, res, next) {
       'Cookie': 'PHPSESSID=eqrp3l8qcchb6jui227150q6do; frontend=4jh225e6m5q667fmq7d90l2c2d; frontend_cid=W1TlOlMwtiOVBIcG'
     }
   };
-console.log('config:::::::::',config);
   axios.request(config)
     .then((response) => {
-      console.log(JSON.stringify(response.data));
+      // console.log(JSON.stringify(response.data));
       const productList = Products.insertMany(response.data);
       if (!productList) {
         return next({ status: 400, name: 'customerror', message: 'Please fill the data in the file!' });

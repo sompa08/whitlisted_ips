@@ -2,13 +2,18 @@
 
 const express = require('express');
 const createOrder = require('../controllers/create.order');
-// const getOrderList = require('../controllers/get.product.list');
+const saveOrderDeatils = require('../controllers/save.order.deatils')
+const getOrderDeatils = require('../controllers/get.order.deatils');
 
 const router = express.Router();
 
 router
     .route('/create/orders')
-    .post(createOrder);
-    // .get(getProductList);
+    .post(createOrder)
+
+router
+    .route('/orders/details/:orderId?')
+    .post(saveOrderDeatils)
+    .get(getOrderDeatils);
 
 module.exports = router; 
