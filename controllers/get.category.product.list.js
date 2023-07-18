@@ -1,9 +1,8 @@
-const Inventories = require('../models/inventory');
+const Products = require('../models/product');
 
-async function getProductList(req, res) {
-    let sku = req.query.sku;
+async function getCategoryProductList(req, res) {
 
-    const catalogCategoriesProducts = await Inventories.findOne({ sku: sku }).exec();
+    const catalogCategoriesProducts = await Products.find({}).exec();
 
     if (!catalogCategoriesProducts.length > 0) {
         return res.status(400).send({ status: 400, name: 'customerror', message: 'Data not found' })
@@ -12,4 +11,4 @@ async function getProductList(req, res) {
     }
 }
 
-module.exports = getProductList;
+module.exports = getCategoryProductList;
