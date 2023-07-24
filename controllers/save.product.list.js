@@ -13,7 +13,6 @@ async function saveProductList(req, res, next) {
   let tokenCode = await token();
 
   const signature = createsignature(method, URL);
-const bearer= 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb25zdW1lcklkIjo0ODgsImV4cCI6MTY5MDIzMTgxNywidG9rZW4iOiI5MzJiZDkxZGFlZDg0NWQyNDhkMTQ0ZWY1NzE3NTQ0ZiJ9.8eTKzc21vLAwixaXIdFYIyibSyRtmhC8INdAAcNgQA8'
   const config = {
     method: method,
     maxBodyLength: Infinity,

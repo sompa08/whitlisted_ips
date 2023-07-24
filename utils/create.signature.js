@@ -1,6 +1,8 @@
 const cryptoJS = require("crypto-js");
-
 function createsignature(method, URL, data) {
+    // let data1= {"address":{"city":"bangalore","country":"IN","firstname":"Jhon","postcode":"560076"},"billing":{"city":"bangalore","country":"IN","firstname":"Jhon","postcode":"560076","region":"Karnataka"},"couponCode":"DISC100","payments":[{"amount":1000,"code":"svc","poNumber":"johndeo01"}],"products":[{"currency":356,"payout":["Object"],"price":1000,"qty":1,"sku":"EGCGBFK001"}],"refno":"001000000abc","syncOnly":false};
+    // let data2={"cards":[{"name":"ABC XYZ","email":"abc@xyz.com","id":208,"telephone":"+911234567890"},{"name":"BCD WXY","email":"def@xyz.com","id":207,"telephone":"+911234567800"}]}
+    // console.log('methodmethodmethod',method,URL,data);
     var requestBody = data;
     var requestHttpMethod = method;
 
@@ -39,6 +41,7 @@ function createsignature(method, URL, data) {
                 sortedObj[key] = object[key];
             }
         }
+        // console.log('sortedObj',sortedObj);
         return sortedObj;
     }
 
@@ -76,12 +79,11 @@ function createsignature(method, URL, data) {
     let fixedEncodeURIComponent = (str) => {
         return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
             return '%' + c.charCodeAt(0).toString(16).toUpperCase();
-        });
+          });
     }
     const signature = cryptoJS.HmacSHA512(getConcatenateBaseString(), clientSecret).toString();
 
     return signature;
 }
-
 
 module.exports = createsignature;
